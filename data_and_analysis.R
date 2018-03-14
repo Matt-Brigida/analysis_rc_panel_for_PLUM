@@ -45,6 +45,10 @@ call_all <- pdata.frame(call_all, index = c("RSSD9001", "DATE"), drop.index=TRUE
 ## SBLTOT_TA: total small business loans as a percent of total assets
 ## SBLTOT_TA0: lagged
 
+       ## CSBLTOT = MIN(2, SBLTOT   / SBLTOT0 - 1);
+       ##  CBLTOT = MIN(2,  BLTOT   /  BLTOT0 - 1);
+
+
 ## ROA0
 ## ROE0
 
@@ -57,11 +61,27 @@ call_all <- pdata.frame(call_all, index = c("RSSD9001", "DATE"), drop.index=TRUE
 ## BADBKFC: bad bank times financial crisis ind
 ## BADBKPC: bad bank times post crisis ind
 
-fe <- plm(SBLTOT0 ~ TLTA + BADBANK + BADBKFC + BADBKPC + ROA0 + TE0 + DENOVO + LIQTA0 + Y1995 + Y1996 + Y1997 + Y1998 + Y1999 + Y2000 + Y2001 + Y2002 + Y2003 + Y2004 + Y2005 + Y2006 + Y2007 + Y2008 + Y2009 + Y2010 + Y2011 + Y2012 + Y2013 + mdi_ind*1 + mdi_ind*TE0, data = call_all, model = "within")
 
-fixedeffects <- fixef(fe)
+fe1 <- plm(SBLTOT0 ~ TLTA + BADBANK + BADBKFC + BADBKPC + ROA0 + TE0 + DENOVO + LIQTA0 + Y1995 + Y1996 + Y1997 + Y1998 + Y1999 + Y2000 + Y2001 + Y2002 + Y2003 + Y2004 + Y2005 + Y2006 + Y2007 + Y2008 + Y2009 + Y2010 + Y2011 + Y2012 + Y2013 + mdi_ind*1 + mdi_ind*TE0, data = call_all, model = "within")
+
+fixedeffects1 <- fixef(fe1)
+
+
+fe2 <- plm(SBLTOT ~ TLTA + BADBANK + BADBKFC + BADBKPC + ROA0 + TE0 + DENOVO + LIQTA0 + Y1995 + Y1996 + Y1997 + Y1998 + Y1999 + Y2000 + Y2001 + Y2002 + Y2003 + Y2004 + Y2005 + Y2006 + Y2007 + Y2008 + Y2009 + Y2010 + Y2011 + Y2012 + Y2013 + mdi_ind*1 + mdi_ind*TE0, data = call_all, model = "within")
+
+fixedeffects2 <- fixef(fe2)
+
+
+fe3 <- plm(CBLTOT ~ TLTA + BADBANK + BADBKFC + BADBKPC + ROA0 + TE0 + DENOVO + LIQTA + Y1995 + Y1996 + Y1997 + Y1998 + Y1999 + Y2000 + Y2001 + Y2002 + Y2003 + Y2004 + Y2005 + Y2006 + Y2007 + Y2008 + Y2009 + Y2010 + Y2011 + Y2012 + Y2013 + mdi_ind*1 + mdi_ind*TE0, data = call_all, model = "within")
+
+
 
 ## include Y2014, dummy variable trap?? What years does the data cover??
+
+
+
+
+### other types of models; no point to them, just testing package------
 
 re <- plm(SBLTOT0 ~ TLTA + BADBANK + BADBKFC + BADBKPC + ROA0 + TE0 + DENOVO + LIQTA0 + Y1995 + Y1996 + Y1997 + Y1998 + Y1999 + Y2000 + Y2001 + Y2002 + Y2003 + Y2004 + Y2005 + Y2006 + Y2007 + Y2008 + Y2009 + Y2010 + Y2011 + Y2012 + Y2013 + mdi_ind*1 + mdi_ind*TE0, data = call_all, model = "random")  ## doesnt work
 
@@ -72,12 +92,6 @@ be <- plm(SBLTOT0 ~ TLTA + BADBANK + BADBKFC + BADBKPC + ROA0 + TE0 + DENOVO + L
 fd <- plm(SBLTOT0 ~ TLTA + BADBANK + BADBKFC + BADBKPC + ROA0 + TE0 + DENOVO + LIQTA0 + Y1995 + Y1996 + Y1997 + Y1998 + Y1999 + Y2000 + Y2001 + Y2002 + Y2003 + Y2004 + Y2005 + Y2006 + Y2007 + Y2008 + Y2009 + Y2010 + Y2011 + Y2012 + Y2013 + mdi_ind*1 + mdi_ind*TE0, data = call_all, model = "fd")  ## really no reason to do this
 
 lm <- lm(SBLTOT0 ~ TLTA + BADBANK + BADBKFC + BADBKPC + ROA0 + TE0 + DENOVO + LIQTA0 + Y1995 + Y1996 + Y1997 + Y1998 + Y1999 + Y2000 + Y2001 + Y2002 + Y2003 + Y2004 + Y2005 + Y2006 + Y2007 + Y2008 + Y2009 + Y2010 + Y2011 + Y2012 + Y2013 + mdi_ind*1 + mdi_ind*TE0, data = call_all)  ## regular regression
-
-
-
-
-
-
 
 
 
