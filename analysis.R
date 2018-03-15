@@ -1,42 +1,8 @@
-## to read sas7bdat file --------
+### analysis------
 
-library(haven)
 library(plm)
 
-call_all <- read_sas("../../Data/call_all.sas7bdat")
-
-### removing duplicate rows-----
-## create one index
-theindex <- paste0(call_all$DATE, "_", call_all$RSSD9001)
-
-call_all <- cbind(theindex, call_all)
-
-call_all <- subset(call_all, !duplicated(call_all$theindex))
-
-## MDI data -----
-
-mdi <- read.csv("../MDIs.csv", header = TRUE, stringsAsFactors = FALSE)
-
-### create MDI indicator-----
-
-mdi_ind <- 0
-
-for (i in 1:dim(call_all)[1]){
-    mdi_ind[i] <- ifelse(call_all$RSSD9001[i] %in% mdi$IDRSSD, 1, 0)
-}
-
-call_all <- cbind(call_all, mdi_ind)
-
-rm(mdi_ind)
-
-
-## convert to pdata.frame for panel data calculations------
-
-call_all <- pdata.frame(call_all, index = c("RSSD9001", "DATE"), drop.index=TRUE, row.names=TRUE)
-
-
-
-### analysis------
+call_all <- readRDS("./callall_pdata.rds")
 
 ### data already in data set (call_all)
 
@@ -62,26 +28,6 @@ call_all <- pdata.frame(call_all, index = c("RSSD9001", "DATE"), drop.index=TRUE
 ## BADBKPC: bad bank times post crisis ind
 
 
-fe1 <- plm(SBLTOT0 ~ TLTA + BADBANK + BADBKFC + BADBKPC + ROA0 + TE0 + DENOVO + LIQTA0 + Y1995 + Y1996 + Y1997 + Y1998 + Y1999 + Y2000 + Y2001 + Y2002 + Y2003 + Y2004 + Y2005 + Y2006 + Y2007 + Y2008 + Y2009 + Y2010 + Y2011 + Y2012 + Y2013 + mdi_ind*1 + mdi_ind*TE0, data = call_all, model = "within")
-
-fixedeffects1 <- fixef(fe1)
-
-## dont need time dummies if we use both firm *and* time fixed effects:
-
-fe11 <- plm(SBLTOT0 ~ TLTA + BADBANK + BADBKFC + BADBKPC + ROA0 + TE0 + DENOVO + LIQTA0 + mdi_ind*1 + mdi_ind*TE0, data = call_all, model = "within", effect = "twoways")
-
-fixedeffects11 <- fixef(fe11)
-
-
-
-fe2 <- plm(SBLTOT ~ TLTA + BADBANK + BADBKFC + BADBKPC + ROA0 + TE0 + DENOVO + LIQTA0 + mdi_ind*1 + mdi_ind*TE0, data = call_all, model = "within", effect = "twoways")
-
-fixedeffects2 <- fixef(fe2)
-
-
-fe3 <- plm(CBLTOT ~ TLTA + BADBANK + BADBKFC + BADBKPC + ROA0 + TE0 + DENOVO + LIQTA + mdi_ind*1 + mdi_ind*TE0, data = call_all, model = "within", effect = "twoways")
-
-fixedeffects3 <- fixef(fe3)
 
 ## using variables from Table 1-----
 
@@ -114,13 +60,35 @@ fixedeffects4 <- fixef(fe4)
 ## F-statistic: 4927.31 on 9 and 147855 DF, p-value: < 2.22e-16
 
 
-
-fe5 <- plm(CSBLTOT_TA ~  mdi_ind*EQTA0 + SBLTOT_TA + EQTA0 + ROA0 + NPA0 + LIQTA0 + CORETA0 + BCOMMITTAC0 + DENOVO, data = call_all, model = "within", effect = "twoways")
+fe5 <- plm(CSBLTOT ~  mdi_ind*EQTA0 + TLTA + EQTA0 + ROA0 + NPA0 + LIQTA0 + CORETA0 + BCOMMITTAC0 + DENOVO, data = call_all, model = "within", effect = "twoways")
 
 fixedeffects5 <- fixef(fe5)
 
 
 
+
+## old other variables-------
+
+fe1 <- plm(SBLTOT0 ~ TLTA + BADBANK + BADBKFC + BADBKPC + ROA0 + TE0 + DENOVO + LIQTA0 + Y1995 + Y1996 + Y1997 + Y1998 + Y1999 + Y2000 + Y2001 + Y2002 + Y2003 + Y2004 + Y2005 + Y2006 + Y2007 + Y2008 + Y2009 + Y2010 + Y2011 + Y2012 + Y2013 + mdi_ind*1 + mdi_ind*TE0, data = call_all, model = "within")
+
+fixedeffects1 <- fixef(fe1)
+
+## dont need time dummies if we use both firm *and* time fixed effects:
+
+fe11 <- plm(SBLTOT0 ~ TLTA + BADBANK + BADBKFC + BADBKPC + ROA0 + TE0 + DENOVO + LIQTA0 + mdi_ind*1 + mdi_ind*TE0, data = call_all, model = "within", effect = "twoways")
+
+fixedeffects11 <- fixef(fe11)
+
+
+
+fe2 <- plm(SBLTOT ~ TLTA + BADBANK + BADBKFC + BADBKPC + ROA0 + TE0 + DENOVO + LIQTA0 + mdi_ind*1 + mdi_ind*TE0, data = call_all, model = "within", effect = "twoways")
+
+fixedeffects2 <- fixef(fe2)
+
+
+fe3 <- plm(CBLTOT ~ TLTA + BADBANK + BADBKFC + BADBKPC + ROA0 + TE0 + DENOVO + LIQTA + mdi_ind*1 + mdi_ind*TE0, data = call_all, model = "within", effect = "twoways")
+
+fixedeffects3 <- fixef(fe3)
 
 
 
