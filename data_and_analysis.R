@@ -66,17 +66,60 @@ fe1 <- plm(SBLTOT0 ~ TLTA + BADBANK + BADBKFC + BADBKPC + ROA0 + TE0 + DENOVO + 
 
 fixedeffects1 <- fixef(fe1)
 
+## dont need time dummies if we use both firm *and* time fixed effects:
 
-fe2 <- plm(SBLTOT ~ TLTA + BADBANK + BADBKFC + BADBKPC + ROA0 + TE0 + DENOVO + LIQTA0 + Y1995 + Y1996 + Y1997 + Y1998 + Y1999 + Y2000 + Y2001 + Y2002 + Y2003 + Y2004 + Y2005 + Y2006 + Y2007 + Y2008 + Y2009 + Y2010 + Y2011 + Y2012 + Y2013 + mdi_ind*1 + mdi_ind*TE0, data = call_all, model = "within")
+fe11 <- plm(SBLTOT0 ~ TLTA + BADBANK + BADBKFC + BADBKPC + ROA0 + TE0 + DENOVO + LIQTA0 + mdi_ind*1 + mdi_ind*TE0, data = call_all, model = "within", effect = "twoways")
+
+fixedeffects11 <- fixef(fe11)
+
+
+
+fe2 <- plm(SBLTOT ~ TLTA + BADBANK + BADBKFC + BADBKPC + ROA0 + TE0 + DENOVO + LIQTA0 + mdi_ind*1 + mdi_ind*TE0, data = call_all, model = "within", effect = "twoways")
 
 fixedeffects2 <- fixef(fe2)
 
 
-fe3 <- plm(CBLTOT ~ TLTA + BADBANK + BADBKFC + BADBKPC + ROA0 + TE0 + DENOVO + LIQTA + Y1995 + Y1996 + Y1997 + Y1998 + Y1999 + Y2000 + Y2001 + Y2002 + Y2003 + Y2004 + Y2005 + Y2006 + Y2007 + Y2008 + Y2009 + Y2010 + Y2011 + Y2012 + Y2013 + mdi_ind*1 + mdi_ind*TE0, data = call_all, model = "within")
+fe3 <- plm(CBLTOT ~ TLTA + BADBANK + BADBKFC + BADBKPC + ROA0 + TE0 + DENOVO + LIQTA + mdi_ind*1 + mdi_ind*TE0, data = call_all, model = "within", effect = "twoways")
+
+fixedeffects3 <- fixef(fe3)
+
+## using variables from Table 1-----
+
+## model should be one from Table 6-----
+
+## fe4 works!!!  The only questionable variable is the Loans (SBLTOT_TA), but doesnt affect other coefficients and signs
+
+fe4 <- plm(CSBLTOT ~  mdi_ind*EQTA0 + SBLTOT_TA + EQTA0 + ROA0 + NPA0 + LIQTA0 + CORETA0 + BCOMMITTAC0 + DENOVO, data = call_all, model = "within", effect = "twoways")
+
+fixedeffects4 <- fixef(fe4)
+
+## Coefficients:
+##                 Estimate Std. Error  t-value  Pr(>|t|)    
+## EQTA0          1.4542334  0.0192169  75.6747 < 2.2e-16 ***
+## SBLTOT_TA      1.8835005  0.0154367 122.0147 < 2.2e-16 ***
+## ROA0          -5.4593135  0.1162753 -46.9516 < 2.2e-16 ***
+## NPA0          -1.6711286  0.0497745 -33.5740 < 2.2e-16 ***
+## LIQTA0         0.7102791  0.0097735  72.6739 < 2.2e-16 ***
+## CORETA0       -0.1567010  0.0112857 -13.8850 < 2.2e-16 ***
+## BCOMMITTAC0    0.2989920  0.0263706  11.3381 < 2.2e-16 ***
+## DENOVO         0.1379163  0.0048423  28.4818 < 2.2e-16 ***
+## mdi_ind:EQTA0  0.6637962  0.1110326   5.9784 2.259e-09 ***
+## ---
+## Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+## Total Sum of Squares:    16865
+## Residual Sum of Squares: 12974
+## R-Squared:      0.23073
+## Adj. R-Squared: 0.16039
+## F-statistic: 4927.31 on 9 and 147855 DF, p-value: < 2.22e-16
 
 
 
-## include Y2014, dummy variable trap?? What years does the data cover??
+fe5 <- plm(CSBLTOT_TA ~  mdi_ind*EQTA0 + SBLTOT_TA + EQTA0 + ROA0 + NPA0 + LIQTA0 + CORETA0 + BCOMMITTAC0 + DENOVO, data = call_all, model = "within", effect = "twoways")
+
+fixedeffects5 <- fixef(fe5)
+
+
 
 
 
