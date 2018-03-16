@@ -29,35 +29,56 @@ call_all <- readRDS("./callall_pdata.rds")
 
 
 
-## using variables from Table 1-----
+#### Amount of Small-Business Loans
 
-## model should be one from Table 6-----
+## using variables from Table 1, this model should be one from *Table 6*-----
 
-## fe4 works!!!  The only questionable variable is the Loans (SBLTOT_TA), but doesnt affect other coefficients and signs
+## The only questionable variable is the Loans (SBLTOT_TA), but doesnt affect other coefficients and signs
 
-fe4 <- plm(CSBLTOT ~  mdi_ind*EQTA0 + SBLTOT_TA + EQTA0 + ROA0 + NPA0 + LIQTA0 + CORETA0 + BCOMMITTAC0 + DENOVO, data = call_all, model = "within", effect = "twoways")
+fe3 <- plm(CSBLTOT ~  mdi_ind*EQTA0 + SBLTOT_TA + EQTA0 + ROA0 + NPA0 + LIQTA0 + CORETA0 + BCOMMITTAC0 + DENOVO, data = call_all, model = "within", effect = "twoways")
 
-fixedeffects4 <- fixef(fe4)
+fixedeffects3 <- fixef(fe3)
 
-## Coefficients:
-##                 Estimate Std. Error  t-value  Pr(>|t|)    
-## EQTA0          1.4542334  0.0192169  75.6747 < 2.2e-16 ***
-## SBLTOT_TA      1.8835005  0.0154367 122.0147 < 2.2e-16 ***
-## ROA0          -5.4593135  0.1162753 -46.9516 < 2.2e-16 ***
-## NPA0          -1.6711286  0.0497745 -33.5740 < 2.2e-16 ***
-## LIQTA0         0.7102791  0.0097735  72.6739 < 2.2e-16 ***
-## CORETA0       -0.1567010  0.0112857 -13.8850 < 2.2e-16 ***
-## BCOMMITTAC0    0.2989920  0.0263706  11.3381 < 2.2e-16 ***
-## DENOVO         0.1379163  0.0048423  28.4818 < 2.2e-16 ***
-## mdi_ind:EQTA0  0.6637962  0.1110326   5.9784 2.259e-09 ***
-## ---
-## Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 
-## Total Sum of Squares:    16865
-## Residual Sum of Squares: 12974
-## R-Squared:      0.23073
-## Adj. R-Squared: 0.16039
-## F-statistic: 4927.31 on 9 and 147855 DF, p-value: < 2.22e-16
+## Table 4
+
+fe4 <- plm(CSBLTOT ~  BIGBANK + BIGBKFC + BIGBKPC + mdi_ind*EQTA0 + SBLTOT_TA + EQTA0 + ROA0 + NPA0 + LIQTA0 + CORETA0 + BCOMMITTAC0 + DENOVO, data = call_all, model = "within", effect = "twoways")
+
+
+## Table 5
+
+fe5 <- plm(CSBLTOT ~  BADBANK + BADBKFC + BADBKPC + mdi_ind*EQTA0 + SBLTOT_TA + EQTA0 + ROA0 + NPA0 + LIQTA0 + CORETA0 + BCOMMITTAC0 + DENOVO, data = call_all, model = "within", effect = "twoways")
+
+
+## Output three models (tables 3, 4, 5) to word via html-----
+
+stargazer(fe3, fe4, fe5, covariate.labels = c("Large Bank", "Large Bank x Fin. Crisis", "Large Bank x Post Crisis", "Troubled Bank", "Troubled Bank x Fin. Crisis", "Troubled Bank x Post Crisis", "Loans", "Total Equity", "ROA", "NPLs", "Liquid Assets", "Core Deposits", "Committments", "De Novo", "Total Equity x MDI"), dep.var.labels = "Annual % Change in the Amount of Small-Business Loans Outstanding", digits = 3, no.space=TRUE, header=FALSE, type='html', omit.stat=c("LL"), title = "Annual % Change in the Amount of Small-Business Loans Outstanding", out = "tables345.htm", intercept.bottom = TRUE, notes = "Results are from fixed-effects models with both time and bank fixed effects, for the years 1995 through 2015.  The dependent variable is the annual percent change in the amount of small-business loans outstanding. Business loans are defined as the sum of commercial, industrial, and commercial real-estate loans.  ")
+
+
+#### Number of Small-Business Loans------
+
+fe6 <- plm(CNUMSBL ~  mdi_ind*EQTA0 + SBLTOT_TA + EQTA0 + ROA0 + NPA0 + LIQTA0 + CORETA0 + BCOMMITTAC0 + DENOVO, data = call_all, model = "within", effect = "twoways")
+
+## Table 7
+
+fe7 <- plm(CNUMSBL ~  BIGBANK + BIGBKFC + BIGBKPC + mdi_ind*EQTA0 + SBLTOT_TA + EQTA0 + ROA0 + NPA0 + LIQTA0 + CORETA0 + BCOMMITTAC0 + DENOVO, data = call_all, model = "within", effect = "twoways")
+
+## Table 8
+
+fe8 <- plm(CNUMSBL ~  BADBANK + BADBKFC + BADBKPC + mdi_ind*EQTA0 + SBLTOT_TA + EQTA0 + ROA0 + NPA0 + LIQTA0 + CORETA0 + BCOMMITTAC0 + DENOVO, data = call_all, model = "within", effect = "twoways")
+
+
+## Output three models (tables 6, 7, 8) to word via html-----
+
+stargazer(fe6, fe7, fe8, covariate.labels = c("Large Bank", "Large Bank x Fin. Crisis", "Large Bank x Post Crisis", "Troubled Bank", "Troubled Bank x Fin. Crisis", "Troubled Bank x Post Crisis", "Loans", "Total Equity", "ROA", "NPLs", "Liquid Assets", "Core Deposits", "Committments", "De Novo", "Total Equity x MDI"), dep.var.labels = "Annual % Change in the Number of Small-Business Loans Outstanding", digits = 3, no.space=TRUE, header=FALSE, type='html', omit.stat=c("LL"), title = "Annual % Change in the Number of Small-Business Loans Outstanding", out = "tables678.htm", intercept.bottom = TRUE, notes = "Results are from fixed-effects models with both time and bank fixed effects, for the years 1995 through 2015.  The dependent variable is the annual percent change in the number of small-business loans outstanding. Business loans are defined as the sum of commercial, industrial, and commercial real-estate loans.  ")
+
+
+
+
+
+
+
+
 
 
 fe5 <- plm(CSBLTOT ~  mdi_ind*EQTA0 + TLTA + EQTA0 + ROA0 + NPA0 + LIQTA0 + CORETA0 + BCOMMITTAC0 + DENOVO, data = call_all, model = "within", effect = "twoways")
