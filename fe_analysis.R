@@ -5,31 +5,6 @@ library(stargazer)
 
 call_all <- readRDS("./callall_pdata.rds")
 
-### data already in data set (call_all)
-
-## with a 0 at the end is " period t+1 LAG variables from t+0 variables"
-
-## SBLTOT_TA: total small business loans as a percent of total assets
-## SBLTOT_TA0: lagged
-
-       ## CSBLTOT = MIN(2, SBLTOT   / SBLTOT0 - 1);
-       ##  CBLTOT = MIN(2,  BLTOT   /  BLTOT0 - 1);
-
-
-## ROA0
-## ROE0
-
-## LNTA: log of total assets
-## LNTA0: lagged
-
-## TLTA: total loans over total assets (what type of loans???)
-
-
-## BADBKFC: bad bank times financial crisis ind
-## BADBKPC: bad bank times post crisis ind
-
-
-
 #### Amount of Small-Business Loans
 
 ## using variables from Table 1, this model should be one from *Table 6*-----
@@ -119,10 +94,34 @@ stargazer(fe.size4, fe.size5, fe.size6, covariate.labels = c("Large Bank", "Larg
 
 
 
-### old-------
+### old------------------------------------------------------------------------
 
 
+## some variable definitions
 
+
+### data already in data set (call_all)
+
+## with a 0 at the end is " period t+1 LAG variables from t+0 variables"
+
+## SBLTOT_TA: total small business loans as a percent of total assets
+## SBLTOT_TA0: lagged
+
+       ## CSBLTOT = MIN(2, SBLTOT   / SBLTOT0 - 1);
+       ##  CBLTOT = MIN(2,  BLTOT   /  BLTOT0 - 1);
+
+
+## ROA0
+## ROE0
+
+## LNTA: log of total assets
+## LNTA0: lagged
+
+## TLTA: total loans over total assets (what type of loans???)
+
+
+## BADBKFC: bad bank times financial crisis ind
+## BADBKPC: bad bank times post crisis ind
 
 
 
